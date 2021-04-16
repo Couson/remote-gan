@@ -14,7 +14,9 @@
     
     "experiment" : 
     {
+        "test_pipeline": true,
         "EXPERIMENT_IDX": 2,
+        "pipeline_testing": true,
         "cuda": 4,
         "use_pretrained": false,
         "epochs": 200

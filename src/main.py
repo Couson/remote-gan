@@ -98,18 +98,29 @@ def main(config):
     device_use = load_device(experiment_config['cuda'])
     
     # creating dataloaders if necessary
-    if not os.path.exists(os.path.join(etl_config['dataloader_dir'], "train_dataloader.pickle")):
-        data_generator = CIFAR10DataPrep(etl_config)
+#     if not os.path.exists(os.path.join(etl_config['dataloader_dir'], "train_dataloader.pickle")):
+    data_generator = CIFAR10DataPrep(etl_config)
+
+    if experiment_config['test_pipeline']:
+        data_generator.prepare_pipeline_dataloader(pipeline_size = 300)
+        loaders = ['pip_train_dataloader.pickle',
+                   'pip_val_dataloader.pickle', 
+                   'pip_test_dataloader.pickle']
+    else:
         data_generator.prepare_dataloader()
+        loaders = ['train_dataloader.pickle',
+                   'val_dataloader.pickle', 
+                       'test_dataloader.pickle']
     
+    return None
     # load dataloaders
-    with open(os.path.join(etl_config['dataloader_dir'], "train_dataloader.pickle"), "rb") as traindl:
+    with open(os.path.join(etl_config['dataloader_dir'], loaders[0]), "rb") as traindl:
         train_dataloader = pickle.load(traindl)
         
-    with open(os.path.join(etl_config['dataloader_dir'], "val_dataloader.pickle"), "rb") as valdl:
+    with open(os.path.join(etl_config['dataloader_dir'], loaders[1]), "rb") as valdl:
         val_dataloader = pickle.load(valdl)
         
-    with open(os.path.join(etl_config['dataloader_dir'], "test_dataloader.pickle"), "rb") as testdl:
+    with open(os.path.join(etl_config['dataloader_dir'], loaders[2]), "rb") as testdl:
         test_dataloader = pickle.load(testdl)
 
     # load model

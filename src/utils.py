@@ -157,4 +157,15 @@ def format_time(seconds):
     return f
 
 
+def plot_images(X,y,yp,M,N):
+    f,ax = plt.subplots(M,N, sharex=True, sharey=True, figsize=(N,M*1.3))
+    for i in range(M):
+        for j in range(N):
+            ax[i][j].imshow(1-X[i*N+j][0].cpu().numpy(), cmap="gray")
+            title = ax[i][j].set_title("Pred: {}".format(yp[i*N+j].max(dim=0)[1]))
+            plt.setp(title, color=('g' if yp[i*N+j].max(dim=0)[1] == y[i*N+j] else 'r'))
+            ax[i][j].set_axis_off()
+    plt.tight_layout()
+
+
 
